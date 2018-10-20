@@ -96,5 +96,5 @@ with tf.Session() as sess:
         else:
             one_hot_in[element][0] = 1
     
-    acc = sess.run([accuracy], feed_dict={X: shuffled_x, Y_: one_hot_in})
-    print('Validation acc: ', acc)
+    preds = sess.run([nn_out], feed_dict={X: shuffled_x, Y_: one_hot_in})
+    print('Validation acc: ', preds)

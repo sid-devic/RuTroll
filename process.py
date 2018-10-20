@@ -85,7 +85,7 @@ def load_normal_tweets(path, max_tweets=50000):
     # we only care for about 250k tweets (balancing with our russian ones)
     return tweets
 
-def create_data():
+def create_data(write=False):
     print('Loading russian tweets into memory...')
     start = time.time()
     dataset_dir = '/home/sid/datasets/tweets/russian-troll-tweets/'
@@ -119,18 +119,7 @@ def create_data():
                 right_count += 1
             #print(tweet.content)
             #print(tweet.account_category)
-    '''
-    # write to csv
-    with open('tweets.csv', 'w') as csvfile:
-        fieldnames = ['label', 'n_grams']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         
-        for embedding in n_grams:
-            writer.writerow({'label': 1, 'n_grams': embedding})
-
-    csvfile.close()
-    '''
-    
     print('Loading non-troll tweets into memory...')
 
     # load non_troll tweets
@@ -143,6 +132,22 @@ def create_data():
 
     # concat our list of normal tweets
     corpus += norm_tweets
+    
+    if write:
+        # write to csv
+        with open('tweets.csv', 'w') as csvfile:
+            fieldnames = ['tweet', 'label']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            
+            for i in range(len(corpus)):
+                append_label = ''
+                if labels[i] == 1:
+                    append_label = 'russian'
+                else:
+                    append_label = 'non-russian'
+                writer.writerow({'tweet': corpus[i], 'label': append_label}) 
+
+        csvfile.close()
 
     vectorizer = CountVectorizer(max_features=3000)
     word_vec = vectorizer.fit_transform(corpus).todense() 
@@ -169,3 +174,9 @@ def create_data():
     test_y = labels[tr_test:]
 
     return np.array(train_x), np.array(train_y), np.array(test_x), np.array(test_y)
+
+def main():
+    create_data(write=True)
+
+if __name__ == '__main__':
+    main()
