@@ -1,0 +1,2 @@
+model_checkpoint_path: "ten_layer_fc.ckpt"
+all_model_checkpoint_paths: "ten_layer_fc.ckpt"

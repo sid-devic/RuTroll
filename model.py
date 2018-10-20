@@ -51,6 +51,7 @@ train = tf.train.GradientDescentOptimizer(lr).minimize(cost)
 
 correct_prediction = tf.equal(tf.cast(tf.argmax(Y_, axis=1), tf.int64), tf.argmax(nn_out, axis=1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+saver = tf.train.Saver()
 
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
@@ -106,3 +107,6 @@ with tf.Session() as sess:
             correct += 1
         total += 1
     print('\nValidation acc: ', correct / total)
+
+    # save model
+    saver.save(sess, 'models/ten_layer_fc.ckpt')
