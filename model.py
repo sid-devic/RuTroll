@@ -35,13 +35,13 @@ x_flat = tf.contrib.layers.flatten(X)
 Y_ = tf.placeholder(tf.int32, [None, 2])
 
 # entire model
-nn_out = tf.layers.dense(x_flat, 1024)
-nn_out = tf.layers.dense(nn_out, 1024)
-nn_out = tf.layers.dense(nn_out, 512)
-nn_out = tf.layers.dense(nn_out, 256)
-nn_out = tf.layers.dense(nn_out, 256)
-nn_out = tf.layers.dense(nn_out, 128)
-nn_out = tf.layers.dense(nn_out, 32)
+fc1 = tf.layers.dense(x_flat, 1024)
+fc2 = tf.layers.dense(fc1, 1024)
+fc3 = tf.layers.dense(fc2, 512)
+fc4 = tf.layers.dense(fc3, 256)
+fc5 = tf.layers.dense(fc4, 256)
+fc6 = tf.layers.dense(fc5, 128)
+fc7 = tf.layers.dense(fc6, 32)
 nn_out = tf.layers.dense(nn_out, num_classes)
 
 mse = tf.losses.mean_squared_error(Y_, nn_out)
@@ -99,9 +99,9 @@ with tf.Session() as sess:
     preds = sess.run([nn_out], feed_dict={X: shuffled_x, Y_: one_hot_in})
     correct = 0
     total = 0
-    print(preds)
+    
     for j in range(len(preds[0])):
         if np.argmax(preds[0][j]) == np.argmax(one_hot_in[j]):
             correct += 1
         total += 1
-    print('Validation acc: ', correct / total)
+    print('\nValidation acc: ', correct / total)
