@@ -136,8 +136,7 @@ def create_data(write=False):
     if write:
         # write to csv
         with open('tweets.csv', 'w') as csvfile:
-            fieldnames = ['tweet', 'label']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer = csv.writer(csvfile, delimiter=' ')
             
             for i in range(len(corpus)):
                 append_label = ''
@@ -145,7 +144,7 @@ def create_data(write=False):
                     append_label = 'russian'
                 else:
                     append_label = 'non-russian'
-                writer.writerow({'tweet': corpus[i], 'label': append_label}) 
+                writer.writerow([corpus[i], append_label])
 
         csvfile.close()
 

@@ -57,7 +57,7 @@ with tf.Session() as sess:
     x_train, y_train, x_test, y_test = create_data()
     x_train = [a.A for a in x_train] 
     x_train = [a.reshape(-1) for a in x_train]
-    x_test = [a.A for a in x_test] 
+    x_test = [a.A for a in x_test]
     x_test = [a.reshape(-1) for a in x_test]
 
     print('Data snippit: ')
@@ -96,10 +96,7 @@ with tf.Session() as sess:
         else:
             one_hot_in[element][0] = 1
     
-<<<<<<< HEAD
+    
     preds = sess.run([nn_out], feed_dict={X: shuffled_x, Y_: one_hot_in})
     print('Validation acc: ', preds)
-=======
-    acc = sess.run([accuracy], feed_dict={X: shuffled_x, Y_: one_hot_in})
-    print('Validation acc: ', acc)
->>>>>>> 22ada5399093292846685cd713318acc1f1a01cf
+
