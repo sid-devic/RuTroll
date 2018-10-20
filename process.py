@@ -163,7 +163,8 @@ def create_data(write=False):
     print('Left trolls:', left_count, 'Right trolls:', right_count)
     print('Load time:', end - start) 
     print('Total tweets:', len(n_grams))
-  
+ 
+    # shuffle it up, train/test split
     n_grams, labels = shuffle(n_grams, labels)
     tr_test = 25000
     train_x = n_grams[:tr_test]

@@ -19,7 +19,7 @@ print('tf seed: ', tf_rand)
 
 # ========================================= #
 
-iter_ = 100
+iter_ = 30000
 lr = 1e-2
 batch_size = 1024
 
@@ -88,15 +88,20 @@ with tf.Session() as sess:
     # test on validation set
     shuffled_x, shuffled_y = sklearn.utils.shuffle(x_test, y_test)
     shuffled_y = np.reshape(shuffled_y, (len(shuffled_y), 1))
-    one_hot_in = np.zeros((batch_size, 2))
+    one_hot_in = np.zeros((len(shuffled_y), 2))
     
-    for element in range(batch_size):
+    for element in range(len(shuffled_y)):
         if shuffled_y[element] == 1:
             one_hot_in[element][1] = 1
         else:
             one_hot_in[element][0] = 1
-    
-    
+     
     preds = sess.run([nn_out], feed_dict={X: shuffled_x, Y_: one_hot_in})
-    print('Validation acc: ', preds)
-
+    correct = 0
+    total = 0
+    print(preds)
+    for j in range(len(preds[0])):
+        if np.argmax(preds[0][j]) == np.argmax(one_hot_in[j]):
+            correct += 1
+        total += 1
+    print('Validation acc: ', correct / total)
