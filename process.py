@@ -2,6 +2,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from nltk.tokenize import TweetTokenizer
 import time
 import csv
+import pandas as pd
 
 class Rutweet:
     def __init__(self, external_author_id, author, content,
@@ -23,7 +24,6 @@ class Rutweet:
         self.retweet = retweet
         self.account_category = account_category
         self.new_june_2018 = new_june_2018
-
 
 def load_tweets(fn):
     tweets = []
@@ -58,10 +58,32 @@ def load_tweets(fn):
 
     return tweets
 
-# TODO count RightTroll and LeftTroll, load all files and see how much data we end up with.
-# 
+def load_normal_tweets(path, max_tweets=250000):
+    tweets = []
+    counter = 0
+    f = pd.read_csv(path, encoding='latin1')
+    df = f.values.tolist()
+    tokenizer = TweetTokenizer(strip_handles=True, reduce_len=True)
 
-def main():
+    for x in range(len(f)):
+        tweet = df[x][len(df[x]) - 1]
+
+        # clean up the tweet, removing non standard chars
+        tweet = tokenizer.tokenize(tweet)
+        tweet = [word for word in tweet if word.isalpha()]
+        tweet = ' '.join(tweet)
+
+        tweets.append(tweet)
+
+        counter += 1
+        if counter > max_tweets:
+            break
+
+    # we only care for about 250k tweets (balancing with our russian ones)
+    return tweets
+
+def create_data():
+    print('Loading russian tweets into memory...')
     start = time.time()
     dataset_dir = '/home/sid/datasets/tweets/russian-troll-tweets/'
     
@@ -72,30 +94,29 @@ def main():
     left_count = 0
     right_count = 0
 
+    exit_flag = False
+
     for index in range(3,8):
+        # exit after 250k troll tweets parsed
+        if exit_flag:
+            break
+
         rut = load_tweets(dataset_dir + 'IRAhandle_tweets_{0}.csv'.format(index))
         
         for tweet in rut:
+            if len(labels) > 250000:
+                exit_flag = True
+                break
+
             corpus.append(tweet.content)
+            labels.append(1)
             if tweet.account_category == 'LeftTroll':
-                labels.append(0)
                 left_count += 1
             else:
-                labels.append(1)
                 right_count += 1
             #print(tweet.content)
             #print(tweet.account_category)
- 
-    vectorizer = CountVectorizer(ngram_range=(1,2), max_features=2000)
-    word_vec = vectorizer.fit_transform(corpus).todense() 
- 
-    for tweet in corpus:
-        n_grams.append(vectorizer.transform([tweet]))
-
-    end = time.time()
-    print('Left trolls:', left_count, 'Right trolls:', right_count)
-    print('Load time:', end - start)
-    
+    '''
     # write to csv
     with open('tweets.csv', 'w') as csvfile:
         fieldnames = ['label', 'n_grams']
@@ -105,6 +126,30 @@ def main():
             writer.writerow({'label': 1, 'n_grams': embedding})
 
     csvfile.close()
+    '''
+    
+    print('Loading non-troll tweets into memory...')
 
-if __name__ == "__main__":
-    main()
+    # load non_troll tweets
+    non_troll_path = '/home/sid/datasets/tweets/non-russian/non-russian.csv'
+    norm_tweets = load_normal_tweets(non_troll_path)
+
+    # append 0's to the labels for each normal tweet
+    for j in range(len(norm_tweets)):
+        labels.append(0)
+
+    # concat our list of normal tweets
+    corpus += norm_tweets
+
+    vectorizer = CountVectorizer(ngram_range=(1,2), max_features=3000)
+    word_vec = vectorizer.fit_transform(corpus).todense() 
+ 
+    for tweet in corpus:
+        n_grams.append(vectorizer.transform([tweet]))
+
+    end = time.time()
+    print('Left trolls:', left_count, 'Right trolls:', right_count)
+    print('Load time:', end - start) 
+    print('Total tweets:', len(n_grams))
+    
+    return labels, n_grams
