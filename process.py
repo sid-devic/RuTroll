@@ -136,7 +136,7 @@ def create_data(write=False):
     if write:
         # write to csv
         with open('tweets.csv', 'w') as csvfile:
-            writer = csv.writer(csvfile, delimiter=' ')
+            writer = csv.writer(csvfile, delimiter=',')
             
             for i in range(len(corpus)):
                 append_label = ''
