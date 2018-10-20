@@ -4,6 +4,8 @@ import time
 import csv
 import pandas as pd
 import pickle
+import numpy as np
+from sklearn.utils import shuffle
 
 class Rutweet:
     def __init__(self, external_author_id, author, content,
@@ -59,7 +61,7 @@ def load_tweets(fn):
 
     return tweets
 
-def load_normal_tweets(path, max_tweets=250):
+def load_normal_tweets(path, max_tweets=50000):
     tweets = []
     counter = 0
     f = pd.read_csv(path, encoding='latin1')
@@ -105,7 +107,7 @@ def create_data():
         rut = load_tweets(dataset_dir + 'IRAhandle_tweets_{0}.csv'.format(index))
         
         for tweet in rut:
-            if len(labels) > 250:
+            if len(labels) > 50000:
                 exit_flag = True
                 break
 
@@ -142,24 +144,28 @@ def create_data():
     # concat our list of normal tweets
     corpus += norm_tweets
 
-    vectorizer = CountVectorizer(ngram_range=(1,2), max_features=3000)
+    vectorizer = CountVectorizer(max_features=3000)
     word_vec = vectorizer.fit_transform(corpus).todense() 
-        
+ 
     with open('vectorizer.pickle', 'wb') as handle:
-        pickle.dump(vectorizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(word_vec, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     for tweet in corpus:
-        n_grams.append(vectorizer.transform([tweet]))
+        n_gram_tweet = vectorizer.transform([tweet])
+        #print(np.shape(n_gram_tweet))
+        n_grams.append(n_gram_tweet)
 
     end = time.time()
     print('Left trolls:', left_count, 'Right trolls:', right_count)
     print('Load time:', end - start) 
     print('Total tweets:', len(n_grams))
-    
-    train_x = n_grams[:400000]
-    train_y = labels[:400000]
+  
+    n_grams, labels = shuffle(n_grams, labels)
+    tr_test = 25000
+    train_x = n_grams[:tr_test]
+    train_y = labels[:tr_test]
 
-    test_x = n_grams[400000:]
-    test_y = labels[400000:]
+    test_x = n_grams[tr_test:]
+    test_y = labels[tr_test:]
 
-    return train_x, train_y, test_x, test_y
+    return np.array(train_x), np.array(train_y), np.array(test_x), np.array(test_y)
