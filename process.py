@@ -174,12 +174,9 @@ def create_data(write=False):
     test_y = labels[tr_test:]
 
     return np.array(train_x), np.array(train_y), np.array(test_x), np.array(test_y)
-<<<<<<< HEAD
 
 def main():
     create_data(write=True)
 
 if __name__ == '__main__':
     main()
-=======
->>>>>>> 22ada5399093292846685cd713318acc1f1a01cf
