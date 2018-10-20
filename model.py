@@ -21,7 +21,7 @@ print('tf seed: ', tf_rand)
 
 iter_ = 30000
 lr = 1e-2
-batch_size = 1024
+batch_size = 512
 
 # input dimensions are 2 x 3000 (unigram and bigram embedding)
 input_dims = [None, 3000]
@@ -41,8 +41,9 @@ fc3 = tf.layers.dense(fc2, 512)
 fc4 = tf.layers.dense(fc3, 256)
 fc5 = tf.layers.dense(fc4, 256)
 fc6 = tf.layers.dense(fc5, 128)
-fc7 = tf.layers.dense(fc6, 32)
-nn_out = tf.layers.dense(nn_out, num_classes)
+fc7 = tf.layers.dense(fc6, 64)
+fc8 = tf.layers.dense(fc7, 32)
+nn_out = tf.layers.dense(fc8, num_classes)
 
 mse = tf.losses.mean_squared_error(Y_, nn_out)
 cost = tf.reduce_mean(mse)

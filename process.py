@@ -143,8 +143,8 @@ def create_data(write=False):
                 if labels[i] == 1:
                     append_label = 'russian'
                 else:
-                    append_label = 'non-russian'
-                writer.writerow([corpus[i], append_label])
+                    append_label = 'non_russian'
+                writer.writerow([corpus[i], ', ', append_label])
 
         csvfile.close()
 
