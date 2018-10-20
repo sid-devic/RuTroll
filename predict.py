@@ -136,7 +136,6 @@ def census_to_example_bytes(json_instance):
 
 
 def tweet_to_instance(tweet):
-
     with open('vectorizer.pickle', 'rb') as handle:
         vectorizer = pickle.load(handle)
 
@@ -144,7 +143,6 @@ def tweet_to_instance(tweet):
 
 def predict_json_with_tweet (project, model, tweet, version=None):
     return predict_json(project, model, tweet_to_instance(tweet), version)
-
 
 def main(project, model, version=None, force_tfrecord=False):
     """Send user input to the prediction service."""
@@ -176,4 +174,4 @@ def main(project, model, version=None, force_tfrecord=False):
 if __name__ == "__main__":
     # print "Hello world"
     # predict_json_with_tweet("RuTroll", "testModel", "Hello, world")
-    print tweet_to_instance("Hello world!")
+    print(tweet_to_instance("Hello world!"))
