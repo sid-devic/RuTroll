@@ -3,6 +3,7 @@ from nltk.tokenize import TweetTokenizer
 import time
 import csv
 import pandas as pd
+import pickle
 
 class Rutweet:
     def __init__(self, external_author_id, author, content,
@@ -58,7 +59,7 @@ def load_tweets(fn):
 
     return tweets
 
-def load_normal_tweets(path, max_tweets=250000):
+def load_normal_tweets(path, max_tweets=250):
     tweets = []
     counter = 0
     f = pd.read_csv(path, encoding='latin1')
@@ -104,7 +105,7 @@ def create_data():
         rut = load_tweets(dataset_dir + 'IRAhandle_tweets_{0}.csv'.format(index))
         
         for tweet in rut:
-            if len(labels) > 250000:
+            if len(labels) > 250:
                 exit_flag = True
                 break
 
@@ -143,7 +144,10 @@ def create_data():
 
     vectorizer = CountVectorizer(ngram_range=(1,2), max_features=3000)
     word_vec = vectorizer.fit_transform(corpus).todense() 
- 
+        
+    with open('vectorizer.pickle', 'wb') as handle:
+        pickle.dump(vectorizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
     for tweet in corpus:
         n_grams.append(vectorizer.transform([tweet]))
 
@@ -152,4 +156,10 @@ def create_data():
     print('Load time:', end - start) 
     print('Total tweets:', len(n_grams))
     
-    return labels, n_grams
+    train_x = n_grams[:400000]
+    train_y = labels[:400000]
+
+    test_x = n_grams[400000:]
+    test_y = labels[400000:]
+
+    return train_x, train_y, test_x, test_y
