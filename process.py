@@ -63,7 +63,7 @@ def load_tweets(fn):
 
 def main():
     start = time.time()
-    dataset_dir = '/mnt/c/Users/sidda/Documents/Programming/datasets/russian-troll-tweets/'
+    dataset_dir = '/home/sid/datasets/tweets/russian-troll-tweets/'
     
     corpus = []
     n_grams = []
@@ -72,7 +72,7 @@ def main():
     left_count = 0
     right_count = 0
 
-    for index in range(3,5):
+    for index in range(3,8):
         rut = load_tweets(dataset_dir + 'IRAhandle_tweets_{0}.csv'.format(index))
         
         for tweet in rut:
@@ -86,7 +86,7 @@ def main():
             #print(tweet.content)
             #print(tweet.account_category)
  
-    vectorizer = CountVectorizer(ngram_range=(1,2), max_features=10000)
+    vectorizer = CountVectorizer(ngram_range=(1,2), max_features=2000)
     word_vec = vectorizer.fit_transform(corpus).todense() 
  
     for tweet in corpus:
@@ -99,7 +99,7 @@ def main():
     # write to csv
     with open('tweets.csv', 'w') as csvfile:
         fieldnames = ['label', 'n_grams']
-        writer = csvDictWriter(csvfile, fieldnames=fieldnames)
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         
         for embedding in n_grams:
             writer.writerow({'label': 1, 'n_grams': embedding})
