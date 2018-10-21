@@ -148,11 +148,11 @@ def create_data(write=False):
 
         csvfile.close()
 
-    vectorizer = CountVectorizer(max_features=3000)
-    word_vec = vectorizer.fit_transform(corpus)
- 
-    with open('vectorizer.pickle', 'wb') as handle:
-        pickle.dump(word_vec, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    vectorizer = CountVectorizer(max_features=5000)
+    vectorizer.fit_transform(corpus)
+    
+    print(vectorizer)
+    pickle.dump(vectorizer, open('vectorizer.pickle', 'wb'))
     
     #word_vec = word_vec.todense()
     for tweet in corpus:

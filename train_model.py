@@ -19,12 +19,12 @@ print('tf seed: ', tf_rand)
 
 # ========================================= #
 
-iter_ = 30000
+iter_ = 10000
 lr = 1e-2
 batch_size = 512
 
-# input dimensions are 2 x 3000 (unigram and bigram embedding)
-input_dims = [None, 3000]
+# input dimensions are 5000 (unigram and bigram embedding)
+input_dims = [None, 5000]
 num_classes = 2
 
 # input placeholder
@@ -110,3 +110,4 @@ with tf.Session() as sess:
 
     # save model
     saver.save(sess, 'models/ten_layer_fc.ckpt')
+    #tf.saved_model.simple_save(sess, 'models/ten_layer_fc', inputs={'X':X, 'Y_':Y_}, outputs={'nn_out':nn_out})
