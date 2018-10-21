@@ -47,7 +47,7 @@ nn_out = tf.layers.dense(fc8, num_classes)
 
 mse = tf.losses.mean_squared_error(Y_, nn_out)
 cost = tf.reduce_mean(mse)
-train = tf.train.GradientDescentOptimizer(lr).minimize(cost)
+train = tf.train.AdagradOptimizer(lr).minimize(cost)
 
 correct_prediction = tf.equal(tf.cast(tf.argmax(Y_, axis=1), tf.int64), tf.argmax(nn_out, axis=1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
