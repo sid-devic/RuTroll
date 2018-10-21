@@ -1,4 +1,4 @@
-# Overview
+# RuTroll
 We will briefly describe the three contributions of our project:
 1. A fully functional, twitter augmenting chrome extension that protects the user against foreign propaganda
 2. A home-brewed machine learning model comparable to state of the art results on classification of Russian-troll tweets
@@ -35,7 +35,7 @@ We optimize mean squared error using ```tf.GradientDescentOptimizer```, having o
 | AdaGrad  	| 0.904162557                    	|
 | Adam     	| 0.866541337                    	|
    
-   
+
 ### Training Curve  
 
 ![grad_desc](images_logs/grad_desc.png)
@@ -45,3 +45,6 @@ Each task had it's own difficulty. Since we were a team of three, each of us foc
 
 ## References
 [1] Rudolph, S. (1997). On topology, size and generalization of non-linear feed-forward neural networks. Neurocomputing, 16(1), pp.1-22. 
+  
+
+_Submitted to [HackHarvard 2018](https://devpost.com/software/rutroll)
