@@ -8,7 +8,10 @@ Our model is a ten-layer fully connected neural network built with the abstracte
 ## Preprocessing
 We extract only the tweets and classes of each tweet in _process.py_. We have conveniently provided the reader a labeled dataset with _over_ 250k tweets from Russian and non-Russian sources, stored as ```tweets.csv```.  
 
-We make heavy use of sklearn's CountVectorizer object, which allows us to transform a tweet into a fixed ```[5000, 1]``` length vector, based on unigrams and bigrams of each tweet. We keep only the 5000 most occuring instances of words for classification, due to memory constraints on our training hardware.
+We make heavy use of sklearn's CountVectorizer object, which allows us to transform a tweet into a fixed ```[5000, 1]``` length vector, based on unigrams and bigrams of each tweet. We keep only the 5000 most occuring instances of words for classification, due to memory constraints on our training hardware.  
+  
+We optimize mean squared error using ```tf.GradientDescentOptimizer```, having obtained better results with simple gradient descent than with ```tf.softmax_cross_entropy_with_logitst_v2``` or ```tf.AdamOptimizer```. A sample 10,000 iteration training run is shown below:  
+  
 
 ## References
 [1] Rudolph, S. (1997). On topology, size and generalization of non-linear feed-forward neural networks. Neurocomputing, 16(1), pp.1-22. 
