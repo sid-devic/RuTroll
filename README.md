@@ -9,6 +9,8 @@ On 10/17/18, Twitter released a dataset of over 10 million tweets thought to bel
 
 ## Chrome Extension
 We built a chrome extension which modifies the user's twitter experience by highlighting tweets that are suspected to be Russian troll tweets. This was all written in javascript and utilized Google's AutoML, which we trained on data we collected. The extension highlight's tweets that the model we learned thought as "highly russian" (above 90% confidence), and furthermore censors their potentially offensive profile picture.
+  
+![timeline](images_logs/timeline.png)  
 
 ## Data and Model
 The bulk of our data comes from [the website fivethirtyeight](https://github.com/fivethirtyeight/russian-troll-tweets), which released a dataset of over 1.4 million tweets known to have come from botnets or Russian trolls. For normal, non-malicious tweet data, we used [kaggle's sentiment analysis dataset](https://www.kaggle.com/c/twitter-sentiment-analysis2). We combine the data into a single training file, described later.
@@ -32,8 +34,9 @@ We optimize mean squared error using ```tf.GradientDescentOptimizer```, having o
 | GradDesc 	| 0.905118087                    	|
 | AdaGrad  	| 0.904162557                    	|
 | Adam     	| 0.866541337                    	|
-  
-Training Curve  
+   
+   
+### Training Curve  
 
 ![grad_desc](images_logs/grad_desc.png)
   
