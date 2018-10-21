@@ -11,13 +11,18 @@ We extract only the tweets and classes of each tweet in _process.py_. We have co
 We make heavy use of sklearn's CountVectorizer object, which allows us to transform a tweet into a fixed ```[5000, 1]``` length vector, based on unigrams and bigrams of each tweet. We keep only the 5000 most occuring instances of words for classification, due to memory constraints on our training hardware.  
   
 ## Training and Results  
-Our best holdout validation accuracy is ```~0.91```, compared to Google's AutoML score of ```0.94```.  
+Our best holdout validation accuracy is ```0.91```, compared to Google's AutoML score of ```0.94```.  
   
 We optimize mean squared error using ```tf.GradientDescentOptimizer```, having obtained better results with simple gradient descent than with ```tf.softmax_cross_entropy_with_logits_v2```, ```tf.AdamOptimizer```, or ```tf.AdagradOptimizer```. A sample 10,000 iteration training run is shown below:  
   
 ![grad_desc](images_logs/grad_desc.png)  
   
- 
+
+|          	| Validation Acc (5 Run Average) 	|
+|----------	|--------------------------------	|
+| GradDesc 	| 0.905118087                    	|
+| AdaGrad  	| 0.904162557                    	|
+| Adam     	| 0.866541337                    	|
   
 
 ## References
