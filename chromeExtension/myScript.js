@@ -13,17 +13,19 @@
 
 
 var tweets = document.getElementsByClassName('js-tweet-text tweet-text');
-for (var i = 0, l = tweets.length; i < l; i++) {
-    tweets[i].innerText = 'Some text';
-}
+var message = document.getElementsByClassName('js-tweet-text tweet-text');
+var header = document.getElementsByClassName('FullNameGroup');
+var icon = document.getElementsByClassName('avatar js-action-profile-avatar');
 
-const endpoint = "https://automl.googleapis.com/v1beta1/projects/tidy-arcade-220013/locations/us-central1/models/TCN2618236018595798875:predict"
-fetch(endpoint, {
+var endpoint = "https://automl.googleapis.com/v1beta1/projects/tidy-arcade-220013/locations/us-central1/models/TCN2618236018595798875:predict"
+
+predictTweet = (i, tweetText) => {
+  fetch(endpoint, {
     method: 'POST',
     body: JSON.stringify({
         "payload" : {
           "textSnippet": {
-               "content": "I love playing with my cat!",
+               "content": tweetText,
                 "mime_type": "text/plain"
            },
         }
@@ -34,5 +36,21 @@ fetch(endpoint, {
     }
   })
   .then(response => response.json())
-  .then(json => console.log(json))
+  .then(json => {
+    console.log(tweetText, json['payload']);
+    if (json['payload'][0]['displayName'] == 'russian') {
+      
+      header[i].innerText = "RUSSIAN HACKER";
+      header[i].style.color = 'red';
+      header[i].style.fontWeight="bold"
+      message[i].style.backgroundColor = "yellow";
+      icon[i].src = "https://static.thenounproject.com/png/461894-200.png"
+      // tweets[i].innerText = json['payload'][0]['classification']['score'];
+    }
+  }
+  )
+}
 
+for (var i = 0, l = message.length; i < l; i++) {
+    predictTweet(i, message[i].innerText)
+}
