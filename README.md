@@ -3,10 +3,14 @@ This is a twofold project. The main idea is to create a chrome extension which h
   
 The bulk of our data comes from [the website fivethirtyeight](https://github.com/fivethirtyeight/russian-troll-tweets), which released a dataset of over 1.4 million tweets known to have come from botnets or Russian trolls. For normal, non-malicious tweet data, we used [kaggle's sentiment analysis dataset](https://www.kaggle.com/c/twitter-sentiment-analysis2).  
   
-Our model is a ten-layer fully connected neural network built with the abstracted ```tf.layers``` api, with the following layer widths: ```[1024, 1024, 512, 256, 256, 128, 64, 32]``` which is motivated by [1].  
+Our model is a ten-layer fully connected neural network built with the abstracted ```tf.layers``` api, with layer widths ```[1024, 1024, 512, 256, 256, 128, 64, 32]``` (motivated by [1], which proved that homogeneity maybe means something).
   
 ## Preprocessing
+We extract only the tweets and classes of each tweet in _process.py_. We have conveniently provided the reader a labeled dataset with _over_ 250k tweets from Russian and non-Russian sources, stored as ```tweets.csv```.  
 
+We make heavy use of sklearn's CountVectorizer object, which allows us to transform a tweet into a fixed ```[5000, 1]``` length vector, based on unigrams and bigrams of each tweet. We keep only the 5000 most occuring instances of words for classification, due to memory constraints on our training hardware.
 
 ## References
-[1] Rudolph, S. (1997). On topology, size and generalization of non-linear feed-forward neural networks. Neurocomputing, 16(1), pp.1-22.  
+[1] Rudolph, S. (1997). On topology, size and generalization of non-linear feed-forward neural networks. Neurocomputing, 16(1), pp.1-22. 
+
+[!twitter64.png]
