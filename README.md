@@ -12,8 +12,9 @@ We make heavy use of sklearn's CountVectorizer object, which allows us to transf
   
 We optimize mean squared error using ```tf.GradientDescentOptimizer```, having obtained better results with simple gradient descent than with ```tf.softmax_cross_entropy_with_logitst_v2``` or ```tf.AdamOptimizer```. A sample 10,000 iteration training run is shown below:  
   
+![grad_desc](images_logs/grad_desc.png) 
 
 ## References
 [1] Rudolph, S. (1997). On topology, size and generalization of non-linear feed-forward neural networks. Neurocomputing, 16(1), pp.1-22. 
 
-[!twitter64.png]
+![twitter](images_logs/twitter64.png)
